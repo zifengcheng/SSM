@@ -1,0 +1,13 @@
+.vscode/
+__pycache__/
+*.py[cod]
+llada/output/
+dream/output/
+*.csv
+*.env
+.venv/
+dist/
+build/
+*.log
+.idea/
+README_CN.md

@@ -1,0 +1,10 @@
+
+*.py text
+*.md text
+*.txt text
+
+*.sh text eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary

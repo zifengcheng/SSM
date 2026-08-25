@@ -161,8 +161,7 @@ This implementation builds on DPad. Please cite the original DPad paper when usi
       url={https://arxiv.org/abs/2608.23167}, 
 }
 
-@inproceedings{
-DPad,
+@inproceedings{DPad,
 title={{DP}ad: Efficient Diffusion Language Models with Suffix Dropout},
 author={Xinhua Chen and Sitao Huang and Cong Guo and Chiyue Wei and Yintao He and Jianyi Zhang and Hai Helen Li and Yiran Chen},
 booktitle={The Fourteenth International Conference on Learning Representations},

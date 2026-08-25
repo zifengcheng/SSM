@@ -151,6 +151,22 @@ Source files in this repository carry Apache License 2.0 headers. See the indivi
 
 This implementation builds on DPad. Please cite the original DPad paper when using its inherited components:
 
-```bibtex
+```
+@article{SSM,
+      title={Accelerating Diffusion Language Models via Structured Suffix Modeling}, 
+      author={Zifeng Cheng and Keda Li and Zhiwei Jiang and Cong Wang and Fei Shen and Qing Gu},
+      year={2026},
+      eprint={2608.23167},
+      eprinttype={arXiv},
+      url={https://arxiv.org/abs/2608.23167}, 
+}
 
+@inproceedings{
+DPad,
+title={{DP}ad: Efficient Diffusion Language Models with Suffix Dropout},
+author={Xinhua Chen and Sitao Huang and Cong Guo and Chiyue Wei and Yintao He and Jianyi Zhang and Hai Helen Li and Yiran Chen},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=0yOsSMU1eY}
+}
 ```

@@ -113,8 +113,8 @@ def apply_current_block_warm_start(
     current_block_positions,
     suffix_soft_states,
     suffix_soft_valid,
-    mask_embedding,
-    beta,
+    # mask_embedding,
+    # beta,
 ):
     if inputs_embeds is None:
         return inputs_embeds, 0
@@ -145,11 +145,14 @@ def apply_current_block_warm_start(
     abs_t = torch.tensor(valid_abs, dtype=torch.long, device=inputs_embeds.device)
     seq_t = torch.tensor(valid_seq_pos, dtype=torch.long, device=inputs_embeds.device)
 
-    b = _clamp01(beta)
+    # b = _clamp01(beta)
     warm_vec = suffix_soft_states[abs_t].to(dtype=inputs_embeds.dtype, device=inputs_embeds.device)
-    mask_vec = mask_embedding.to(dtype=inputs_embeds.dtype, device=inputs_embeds.device).unsqueeze(0)
-    init_vec = (1.0 - b) * mask_vec + b * warm_vec
-    inputs_embeds[:, seq_t, :] = init_vec.unsqueeze(0)
+    # mask_vec = mask_embedding.to(dtype=inputs_embeds.dtype, device=inputs_embeds.device).unsqueeze(0)
+    # init_vec = (1.0 - b) * mask_vec + b * warm_vec
+    # inputs_embeds[:, seq_t, :] = init_vec.unsqueeze(0)
+    # The warm-start blend coefficient is fixed at 1.0: use the cached
+    # suffix soft state directly when the token enters the current block.
+    inputs_embeds[:, seq_t, :] = warm_vec.unsqueeze(0)
     return inputs_embeds, int(abs_t.numel())
 
 def add_gumbel_noise(logits, temperature):
@@ -260,7 +263,7 @@ def generate(model, prompt, steps=128, gen_length=128, block_length=128, tempera
              remasking='low_confidence', mask_id=126336, eos_id=126081, threshold=None, 
              dropout='null', sigma=None, scale=None, preserved_tokens=0, window=None, early_termination=True,
              local_window=128,
-             use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5, current_warm_start_beta=0.5,
+             use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5,
              suffix_soft_non_local_only=False, stats=None):
     '''
     Args:
@@ -293,7 +296,7 @@ def generate(model, prompt, steps=128, gen_length=128, block_length=128, tempera
     use_suffix_soft_state = bool(use_suffix_soft_state)
     suffix_soft_topk = max(1, int(suffix_soft_topk))
     suffix_soft_alpha = _clamp01(suffix_soft_alpha)
-    current_warm_start_beta = _clamp01(current_warm_start_beta)
+    # current_warm_start_beta = _clamp01(current_warm_start_beta)
     suffix_soft_non_local_only = bool(suffix_soft_non_local_only)
 
     emb_layer = None
@@ -361,8 +364,6 @@ def generate(model, prompt, steps=128, gen_length=128, block_length=128, tempera
                         current_block_positions=current_block_positions,
                         suffix_soft_states=suffix_soft_state_cache,
                         suffix_soft_valid=suffix_soft_valid,
-                        mask_embedding=mask_embed,
-                        beta=current_warm_start_beta,
                     )
 
             logits = model(
@@ -432,7 +433,7 @@ def generate_with_prefix_cache(model, prompt, steps=128, gen_length=128, block_l
              remasking='low_confidence', mask_id=126336, eos_id=126081, threshold=None, 
              dropout='null', sigma=None, scale=None, preserved_tokens=0, window=None, early_termination=True,
              local_window=128,
-             use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5, current_warm_start_beta=0.5,
+             use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5,
              suffix_soft_non_local_only=False, stats=None):
     '''
     Args:
@@ -464,7 +465,7 @@ def generate_with_prefix_cache(model, prompt, steps=128, gen_length=128, block_l
     use_suffix_soft_state = bool(use_suffix_soft_state)
     suffix_soft_topk = max(1, int(suffix_soft_topk))
     suffix_soft_alpha = _clamp01(suffix_soft_alpha)
-    current_warm_start_beta = _clamp01(current_warm_start_beta)
+    # current_warm_start_beta = _clamp01(current_warm_start_beta)
     suffix_soft_non_local_only = bool(suffix_soft_non_local_only)
     emb_layer = None
     emb_weight = None
@@ -690,7 +691,7 @@ def generate_with_dual_cache(model, prompt, steps=128, gen_length=128, block_len
             remasking='low_confidence', mask_id=126336, eos_id=126081, threshold=None, 
             dropout='null', sigma=None, scale=None, preserved_tokens=0, window=None, early_termination=True,
             local_window=128,
-            use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5, current_warm_start_beta=0.5,
+            use_suffix_soft_state=False, suffix_soft_topk=5, suffix_soft_alpha=0.5,
             suffix_soft_non_local_only=False, stats=None):
     '''
     Args:
@@ -723,7 +724,7 @@ def generate_with_dual_cache(model, prompt, steps=128, gen_length=128, block_len
     use_suffix_soft_state = bool(use_suffix_soft_state)
     suffix_soft_topk = max(1, int(suffix_soft_topk))
     suffix_soft_alpha = _clamp01(suffix_soft_alpha)
-    current_warm_start_beta = _clamp01(current_warm_start_beta)
+    # current_warm_start_beta = _clamp01(current_warm_start_beta)
     suffix_soft_non_local_only = bool(suffix_soft_non_local_only)
 
     emb_layer = None
@@ -795,8 +796,6 @@ def generate_with_dual_cache(model, prompt, steps=128, gen_length=128, block_len
                         current_block_positions=current_block_positions,
                         suffix_soft_states=suffix_soft_state_cache,
                         suffix_soft_valid=suffix_soft_valid,
-                        mask_embedding=mask_embed,
-                        beta=current_warm_start_beta,
                     )
                 return inputs_embeds
 

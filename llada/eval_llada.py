@@ -87,7 +87,6 @@ class LLaDAEvalHarness(LM):
         use_suffix_soft_state=False,
         suffix_soft_topk=5,
         suffix_soft_alpha=0.5,
-        current_warm_start_beta=0.5,
         suffix_soft_non_local_only=False,
         from_scratch=False,
         **kwargs,
@@ -166,7 +165,6 @@ class LLaDAEvalHarness(LM):
         self.use_suffix_soft_state = bool(use_suffix_soft_state)
         self.suffix_soft_topk = int(suffix_soft_topk)
         self.suffix_soft_alpha = float(suffix_soft_alpha)
-        self.current_warm_start_beta = float(current_warm_start_beta)
         self.suffix_soft_non_local_only = bool(suffix_soft_non_local_only)
 
     @property
@@ -383,7 +381,6 @@ class LLaDAEvalHarness(LM):
                     use_suffix_soft_state=self.use_suffix_soft_state,
                     suffix_soft_topk=self.suffix_soft_topk,
                     suffix_soft_alpha=self.suffix_soft_alpha,
-                    current_warm_start_beta=self.current_warm_start_beta,
                     suffix_soft_non_local_only=self.suffix_soft_non_local_only,
                     stats=sample_stats,
                 )

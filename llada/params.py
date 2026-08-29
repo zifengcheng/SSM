@@ -71,5 +71,4 @@ parser.add_argument("--block_boundary_offset", type=int, default=0, help="Offset
 parser.add_argument("--use_suffix_soft_state", action="store_true", default=False, help="Enable suffix soft states (top-k soft embedding) and current-block warm start from suffix states")
 parser.add_argument("-sk", "--suffix_soft_topk", type=int, default=5, help="Top-k vocabulary size for suffix soft state construction")
 parser.add_argument("-sa", "--suffix_soft_alpha", type=float, default=0.5, help="Blend alpha for suffix soft state: h=(1-alpha)*e_mask + alpha*E_topk")
-parser.add_argument("--current_warm_start_beta", type=float, default=0.5, help="Blend beta when a suffix token enters current block: e_init=(1-beta)*e_mask + beta*h_suffix")
 parser.add_argument("--suffix_soft_non_local_only", action="store_true", default=False, help="Experiment-2: apply suffix soft state only on selected suffix tokens outside local window (abs_pos >= block_end + local_window)")

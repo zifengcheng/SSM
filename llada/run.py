@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
 
     if args.use_suffix_soft_state:
-        dropout += f"_sss_k{args.suffix_soft_topk}_a{args.suffix_soft_alpha}_b{args.current_warm_start_beta}"
+        dropout += f"_sss_k{args.suffix_soft_topk}_a{args.suffix_soft_alpha}"
         if args.suffix_soft_non_local_only:
             dropout += "_nlocal"
 
@@ -217,7 +217,6 @@ if __name__ == "__main__":
         f"use_suffix_soft_state={args.use_suffix_soft_state},"
         f"suffix_soft_topk={args.suffix_soft_topk},"
         f"suffix_soft_alpha={args.suffix_soft_alpha},"
-        f"current_warm_start_beta={args.current_warm_start_beta},"
         f"suffix_soft_non_local_only={args.suffix_soft_non_local_only},"
     )
 
